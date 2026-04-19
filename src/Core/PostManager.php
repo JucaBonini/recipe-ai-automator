@@ -71,13 +71,13 @@ class PostManager {
         update_post_meta($post_id, '_recipe_cuisine', 'Brasileira');
         update_post_meta($post_id, '_diet_type', $parts['storage'] ?? 'Tradicional');
 
-        // Nutrição Real do Tema
-        update_post_meta($post_id, '_calorias', $nutri['calories']);
-        update_post_meta($post_id, '_carboidratos', $nutri['carbs']);
-        update_post_meta($post_id, '_proteinas', $nutri['protein']);
-        update_post_meta($post_id, '_gorduras', $nutri['total_fats']);
-        update_post_meta($post_id, '_nutri_serving', '1 porção (aprox.)');
-        update_post_meta($post_id, '_nutri_source', 'Cálculo Baseado em IA (Valores Médios)');
+        // Nutrição Real do Tema (Extraindo apenas números para compatibilidade com type="number")
+        update_post_meta($post_id, '_calorias', (int) filter_var($nutri['calories'], FILTER_SANITIZE_NUMBER_INT));
+        update_post_meta($post_id, '_carboidratos', (int) filter_var($nutri['carbs'], FILTER_SANITIZE_NUMBER_INT));
+        update_post_meta($post_id, '_proteinas', (int) filter_var($nutri['protein'], FILTER_SANITIZE_NUMBER_INT));
+        update_post_meta($post_id, '_gorduras', (int) filter_var($nutri['total_fats'], FILTER_SANITIZE_NUMBER_INT));
+        update_post_meta($post_id, '_nutri_serving', $data['quick_info']['yield'] ?: '1 porção (aprox.)');
+        update_post_meta($post_id, '_nutri_source', 'Cálculo Baseado em IA (Tabelas Médias)');
 
         // Estrutura de Ingredientes (Array para o Tema)
         update_post_meta($post_id, '_ingredientes_grupo', ['Ingredientes']);
