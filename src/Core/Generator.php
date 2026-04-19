@@ -89,7 +89,17 @@ class Generator {
     }
 
     private function get_system_prompt($keyword) {
+        $lang_code = get_option('rai_target_language', 'pt_BR');
+        $languages = [
+            'pt_BR' => 'Português (Brasil)',
+            'en_US' => 'English (USA)',
+            'es_ES' => 'Español (España)'
+        ];
+        $target_lang = $languages[$lang_code] ?? 'Português (Brasil)';
+
         return "Você é um Especialista em SEO e Gastronomia Sênior para o blog Descomplicando Receitas.
+        TODO O CONTEÚDO DEVE SER ESCRITO NO IDIOMA: [$target_lang].
+        
         Crie um conteúdo completo e otimizado para a palavra-chave: [$keyword].
         
         Siga RIGOROSAMENTE esta estrutura JSON:

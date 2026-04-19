@@ -47,11 +47,13 @@ class Settings {
         register_setting('rai_settings_group', 'rai_posts_per_day');
         register_setting('rai_settings_group', 'rai_posting_hours');
         register_setting('rai_settings_group', 'rai_post_status');
+        register_setting('rai_settings_group', 'rai_target_language');
     }
 
     public function render_page() {
         $posts_per_day = (int) get_option('rai_posts_per_day', 1);
         $hours = get_option('rai_posting_hours', []);
+        $target_lang = get_option('rai_target_language', 'pt_BR');
         ?>
         <div class="wrap" style="max-width: 900px; margin-top: 30px;">
             <style>
@@ -71,24 +73,35 @@ class Settings {
 
             <div class="rai-card">
                 <div class="rai-header">
-                    <h1>Recipe AI Automator <span style="font-size:12px; background:rgba(255,255,255,0.2); padding:4px 10px; border-radius:20px; font-weight:normal;">v1.2.0</span></h1>
-                    <p style="opacity:0.7; margin-top:10px;">Gestão Dinâmica de Horários e Automação de Precision.</p>
+                    <h1><?php _e('Recipe AI Automator', 'recipe-ai-automator'); ?> <span style="font-size:12px; background:rgba(255,255,255,0.2); padding:4px 10px; border-radius:20px; font-weight:normal;">v1.2.0</span></h1>
+                    <p style="opacity:0.7; margin-top:10px;"><?php _e('Global Content Engine & Smart Scheduling.', 'recipe-ai-automator'); ?></p>
                 </div>
 
                 <div class="rai-tabs">
-                    <div class="rai-tab active" data-tab="api">API Keys</div>
-                    <div class="rai-tab" data-tab="automation">Agendamento</div>
+                    <div class="rai-tab active" data-tab="api"><?php _e('API Keys', 'recipe-ai-automator'); ?></div>
+                    <div class="rai-tab" data-tab="content"><?php _e('Conteúdo', 'recipe-ai-automator'); ?></div>
+                    <div class="rai-tab" data-tab="automation"><?php _e('Agendamento', 'recipe-ai-automator'); ?></div>
                 </div>
 
                 <form method="post" action="options.php" class="rai-form">
                     <?php settings_fields('rai_settings_group'); ?>
                     
                     <div id="tab-api" class="rai-tab-content">
-                        <label class="rai-field-label">OpenAI API Key (ChatGPT/DALL-E)</label>
+                        <label class="rai-field-label"><?php _e('OpenAI API Key (ChatGPT/DALL-E)', 'recipe-ai-automator'); ?></label>
                         <input type="password" name="rai_api_openai" class="rai-input" value="<?php echo esc_attr(get_option('rai_api_openai')); ?>" placeholder="sk-...">
                         
-                        <label class="rai-field-label">Google Gemini API Key</label>
+                        <label class="rai-field-label"><?php _e('Google Gemini API Key', 'recipe-ai-automator'); ?></label>
                         <input type="password" name="rai_api_gemini" class="rai-input" value="<?php echo esc_attr(get_option('rai_api_gemini')); ?>">
+                    </div>
+
+                    <div id="tab-content" class="rai-tab-content" style="display:none;">
+                        <label class="rai-field-label"><?php _e('Idioma das Receitas', 'recipe-ai-automator'); ?></label>
+                        <select name="rai_target_language" class="rai-input">
+                            <option value="pt_BR" <?php selected($target_lang, 'pt_BR'); ?>>Português (Brasil)</option>
+                            <option value="en_US" <?php selected($target_lang, 'en_US'); ?>>English (USA)</option>
+                            <option value="es_ES" <?php selected($target_lang, 'es_ES'); ?>>Español (España)</option>
+                        </select>
+                        <p class="description"><?php _e('A IA gerará todo o conteúdo (título, instruções, metas) neste idioma.', 'recipe-ai-automator'); ?></p>
                     </div>
 
                     <div id="tab-automation" class="rai-tab-content" style="display:none;">
@@ -115,7 +128,7 @@ class Settings {
                     </div>
 
                     <div style="margin-top:30px;">
-                        <?php submit_button('Salvar Configurações de Elite', 'rai-save-btn'); ?>
+                        <?php submit_button(__('Salvar Configurações de Elite', 'recipe-ai-automator'), 'rai-save-btn'); ?>
                     </div>
                 </form>
             </div>
