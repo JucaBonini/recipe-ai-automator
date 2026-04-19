@@ -41,13 +41,18 @@ class Settings {
     }
 
     public function register_settings() {
-        register_setting('rai_settings_group', 'rai_api_openai');
-        register_setting('rai_settings_group', 'rai_api_gemini');
-        register_setting('rai_settings_group', 'rai_api_claude');
-        register_setting('rai_settings_group', 'rai_posts_per_day');
-        register_setting('rai_settings_group', 'rai_posting_hours');
-        register_setting('rai_settings_group', 'rai_post_status');
-        register_setting('rai_settings_group', 'rai_target_language');
+        register_setting('rai_settings_group', 'rai_api_openai', ['sanitize_callback' => 'sanitize_text_field']);
+        register_setting('rai_settings_group', 'rai_api_gemini', ['sanitize_callback' => 'sanitize_text_field']);
+        register_setting('rai_settings_group', 'rai_api_claude', ['sanitize_callback' => 'sanitize_text_field']);
+        register_setting('rai_settings_group', 'rai_posts_per_day', ['sanitize_callback' => 'intval']);
+        register_setting('rai_settings_group', 'rai_posting_hours', ['sanitize_callback' => [$this, 'sanitize_hours']]);
+        register_setting('rai_settings_group', 'rai_post_status', ['sanitize_callback' => 'sanitize_text_field']);
+        register_setting('rai_settings_group', 'rai_target_language', ['sanitize_callback' => 'sanitize_text_field']);
+    }
+
+    public function sanitize_hours($hours) {
+        if (!is_array($hours)) return [];
+        return array_map('sanitize_text_field', $hours);
     }
 
     public function render_page() {
