@@ -4,7 +4,7 @@ Tags: recipes, ai, content-generator, chatgpt, seo, culinary, automated-posts, g
 Requires at least: 5.8
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,11 +47,18 @@ Yes! We use advanced prompting techniques to ensure every recipe has a unique na
 
 == Changelog ==
 
-= 1.1.1 =
-* Fixed nutrition data extraction for numeric fields.
-* Improved SEO field auto-filling for Meta Description.
+= 1.2.1 =
+* Final security and internationalization polish for official repository submission.
+* Synchronized versions and updated license information.
+
+= 1.2.0 =
+* Added major multi-language support (Portuguese, English, Spanish).
+* Integrated language selection into AI generation prompt.
+* Added new "Content" tab to settings.
+* Improved security with nonces and permission checks.
 
 = 1.1.0 =
+* Initial internal release with DALL-E 3 and SEO automation.
 * Initial public release.
 * Added real-time search and bulk deletion in keyword management.
 * Optimized DALL-E 3 prompts for better photographic results.

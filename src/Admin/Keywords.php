@@ -29,7 +29,7 @@ class Keywords {
                     }
                 }
             }
-            echo '<div class="notice notice-success is-dismissible"><p>Palavras-chave enfileiradas com sucesso!</p></div>';
+            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Palavras-chave enfileiradas com sucesso!', 'recipe-ai-automator') . '</p></div>';
         }
 
         $queue = $wpdb->get_results("SELECT * FROM $table_name ORDER BY status DESC, sort_order ASC LIMIT 100");

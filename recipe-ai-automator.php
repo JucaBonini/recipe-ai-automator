@@ -3,9 +3,11 @@
  * Plugin Name: Recipe AI Automator
  * Plugin URI: https://descomplicandoreceitas.com.br
  * Description: Sistema avançado de automação de posts de receitas com Inteligência Artificial (ChatGPT, Gemini, Claude).
- * Version: 1.2.0
+ * Version: 1.2.1
+ * Stable tag: 1.2.1
  * Author: Juca Souza Bonini
- * License: GPL2
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: recipe-ai-automator
  */
 
