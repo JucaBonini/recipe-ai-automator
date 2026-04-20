@@ -97,14 +97,20 @@ class Generator {
         ];
         $target_lang = $languages[$lang_code] ?? 'Português (Brasil)';
 
-        return "Você é um Especialista em SEO e Gastronomia Sênior para o blog Descomplicando Receitas.
+        return "Você é um Especialista em SEO Generativo (GEO), Engenheiro de Busca por Voz (AEO) e Chef Sênior para o blog Descomplicando Receitas.
         TODO O CONTEÚDO DEVE SER ESCRITO NO IDIOMA: [$target_lang].
         
-        Crie um conteúdo completo e otimizado para a palavra-chave: [$keyword].
+        Crie um conteúdo lendário e otimizado para a palavra-chave: [$keyword].
         
-        Siga RIGOROSAMENTE esta estrutura JSON:
+        Siga RIGOROSAMENTE as diretrizes de 2026:
+        - Introdução Humana: Use ganchos reais, memórias ou problemas comuns. NUNCA use nomes fixos ou padrões repetitivos.
+        - GEO Spike: Forneça um dado técnico exclusivo (segredo do chef) sobre temperatura ou química dos alimentos para citação de IA.
+        - AEO focus: Frases diretas para busca por voz no Snippet e FAQ.
+        - AdSense Strategy: Use ganchos de curiosidade que estimulem o scroll profundo.
+        
+        Siga RIGOROSAMENTE esta estrutura JSON para entrega:
         {
-            \"titles\": [\"3 opções de títulos magnéticos (CTR alto)\"],
+            \"titles\": [\"3 opções de títulos magnéticos (adicione [TITULO_PRINCIPAL] no melhor)\"],
             \"quick_info\": {
                 \"prep_time\": \"Tempo de preparo (ex: 15 min)\",
                 \"cook_time\": \"Tempo de cozimento (ex: 45 min)\",
@@ -112,25 +118,25 @@ class Generator {
                 \"difficulty\": \"Fácil, Médio ou Difícil\"
             },
             \"content_parts\": {
-                \"intro\": \"Narrativa da Mary: Hook forte e promessa de sabor.\",
-                \"snippet\": \"Frase curta respondendo o que é a receita e por que é especial.\",
-                \"engagement_block\": \"Dica de retenção (ex: role até o final para ver variações secretas!)\",
-                \"utensils\": [\"Lista de itens necessários como Liquidificador, Airfryer, Panela de Pressão, etc\"],
-                \"ingredients\": [\"Ingredientes detalhados\"],
-                \"instructions\": [\"Passo a passo didático com micro-dicas entre parênteses\"],
+                \"intro\": \"Narrativa humana e envolvente focado em retenção (dwell time).\",
+                \"snippet\": \"Snippet de resposta rápida (AEO) para Voz e Posição Zero.\",
+                \"engagement_block\": \"Dica de retenção (estimulando o scroll para as variações).\",
+                \"utensils\": [\"Lista técnica de utensílios necessários\"],
+                \"ingredients\": [\"Ingredientes (um por linha)\"],
+                \"instructions\": [\"Passo a passo com micro-dicas técnicas entre parênteses\"],
                 \"nutrition_table\": {
                     \"calories\": \"\", \"carbs\": \"\", \"protein\": \"\", \"total_fats\": \"\", 
                     \"saturated_fats\": \"\", \"fiber\": \"\", \"sodium\": \"\"
                 },
-                \"tips\": \"Truques de especialista para não errar\",
+                \"tips\": \"Dica técnica exclusiva do Chef para ganho de informação (GEO).\",
                 \"variations\": [\"3 variações: Fit, Airfryer e Econômica\"],
-                \"serving\": \"Sugestão de consumo\",
-                \"storage\": \"Como guardar e reaquecer\",
-                \"faq\": [{\"q\":\"pergunta estratégica\",\"a\":\"resposta curta\"}],
-                \"engagement_final\": \"Pergunta para comentário\",
-                \"conclusion_cta\": \"CTA final convidando a compartilhar\"
+                \"serving\": \"Sugestão de serviço premium\",
+                \"storage\": \"Como armazenar e reaquecer (foco em utilidade)\",
+                \"faq\": [{\"q\":\"pergunta de busca por voz\",\"a\":\"resposta curta e direta\"}],
+                \"engagement_final\": \"Pergunta para interação nos comentários\",
+                \"conclusion_cta\": \"CTA final de compartilhamento\"
             },
-            \"meta_description\": \"Descrição de 160 caracteres para SEO.\"
+            \"meta_description\": \"150 caracteres focados em CTR para o Google Search.\"
         }";
     }
 }
