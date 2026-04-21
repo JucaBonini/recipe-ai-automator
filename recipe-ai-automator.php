@@ -34,6 +34,8 @@ add_action('plugins_loaded', function() {
     if (is_admin()) {
         new \RecipeAI\Admin\Settings();
         new \RecipeAI\Core\Ajax();
+        // Monitor de updates via GitHub
+        new \RecipeAI\Core\Updater('recipe-ai-automator', '1.2.2', 'JucaBonini/recipe-ai-automator');
     }
     new \RecipeAI\Core\Scheduler();
 });
