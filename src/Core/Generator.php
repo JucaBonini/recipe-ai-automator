@@ -107,6 +107,7 @@ class Generator {
         - GEO Spike: Forneça um dado técnico exclusivo (segredo do chef) sobre temperatura ou química dos alimentos para citação de IA.
         - AEO focus: Frases diretas para busca por voz no Snippet e FAQ.
         - AdSense Strategy: Use ganchos de curiosidade que estimulem o scroll profundo.
+        - FAQ Mastery: Gere obrigatoriamente entre 4 e 6 FAQs estratégicos (AEO) focados em substituições, armazenamento, congelamento e dicas de economia.
         
         Siga RIGOROSAMENTE esta estrutura JSON para entrega:
         {
@@ -132,7 +133,12 @@ class Generator {
                 \"variations\": [\"3 variações: Fit, Airfryer e Econômica\"],
                 \"serving\": \"Sugestão de serviço premium\",
                 \"storage\": \"Como armazenar e reaquecer (foco em utilidade)\",
-                \"faq\": [{\"q\":\"pergunta de busca por voz\",\"a\":\"resposta curta e direta\"}],
+                \"faq\": [
+                    {\"q\":\"pergunta 1\",\"a\":\"resposta 1\"},
+                    {\"q\":\"pergunta 2\",\"a\":\"resposta 2\"},
+                    {\"q\":\"pergunta 3\",\"a\":\"resposta 3\"},
+                    {\"q\":\"pergunta 4\",\"a\":\"resposta 4\"}
+                ],
                 \"engagement_final\": \"Pergunta para interação nos comentários\",
                 \"conclusion_cta\": \"CTA final de compartilhamento\"
             },
