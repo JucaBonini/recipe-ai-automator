@@ -97,6 +97,18 @@ class PostManager {
         // Calcula Tempo Total automaticamente
         $total = (int) filter_var($info['prep_time'], FILTER_SANITIZE_NUMBER_INT) + (int) filter_var($info['cook_time'], FILTER_SANITIZE_NUMBER_INT);
         update_post_meta($post_id, '_total_time', $total);
+
+        // 🟢 FAQ Automático (Integração God Mode sts-recipe-2)
+        $faq_perguntas = [];
+        $faq_respostas = [];
+        if (!empty($parts['faq'])) {
+            foreach ($parts['faq'] as $f) {
+                $faq_perguntas[] = sanitize_text_field($f['q']);
+                $faq_respostas[] = sanitize_textarea_field($f['a']);
+            }
+        }
+        update_post_meta($post_id, '_faq_perguntas', $faq_perguntas);
+        update_post_meta($post_id, '_faq_respostas', $faq_respostas);
     }
 
     private function save_seo_data($post_id, $data) {
