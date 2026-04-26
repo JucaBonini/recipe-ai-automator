@@ -49,9 +49,6 @@ class PostManager {
         foreach ($parts['variations'] as $v) $html .= "<li>$v</li>";
         $html .= "</ul>\n\n";
 
-        $html .= "<h3>FAQ - Dúvidas Comuns</h3>\n";
-        foreach ($parts['faq'] as $faq) $html .= "<p><strong>{$faq['q']}</strong><br>{$faq['a']}</p>";
-
         $html .= "\n<p><strong>{$parts['engagement_final']}</strong></p>\n";
         $html .= "<p>{$parts['conclusion_cta']}</p>";
 
