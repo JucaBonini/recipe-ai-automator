@@ -4,7 +4,7 @@ Tags: ai, content-generator, chatgpt, gemini, seo, news, reviews, recipes, autom
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Key Features:
 * Dynamic Category Selection via AJAX.
 * Professional Image Generation with Niche-aware prompts.
 * Error Logging System for API monitoring.
-* Full SEO compatibility.
+* Full SEO compatibility with sts-recipe-2 and SEO Engine Pro.
 
 == Installation ==
 
@@ -28,6 +28,11 @@ Key Features:
 
 == Changelog ==
 
+= 1.5.1 =
+* Fixed: Restored full compatibility with sts-recipe-2 custom fields (Ingredients, Instructions, FAQ).
+* Fixed: Restored SEO Engine Pro auto-population for Title, Meta Description and Keyword.
+* Improved: Niche-specific data mapping.
+
 = 1.5.0 =
 * Complete Rebrand: From Recipe AI Automator to Generator AI Now.
 * Added Multi-Niche Support (News, Reviews, Recipes).
@@ -36,6 +41,3 @@ Key Features:
 * Added Error Logging System.
 * Improved Image Prompts for better realism.
 * Clean architecture refactor with namespaces.
-
-= 1.0.0 =
-* Initial release.

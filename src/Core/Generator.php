@@ -102,8 +102,8 @@ class Generator {
 
         if ($niche === 'recipe') {
             return $base_prompt . "Nicho: Culinária/Receitas. Estrutura JSON:\n {
-                \"titles\": [\"3 opções\"], \"quick_info\": {\"prep_time\":\"\",\"cook_time\":\"\",\"yield\":\"\",\"difficulty\":\"\"},
-                \"content_parts\": {\"intro\":\"\",\"snippet\":\"\",\"ingredients\":[],\"instructions\":[],\"nutrition_table\":{},\"faq\":[{\"q\":\"\",\"a\":\"\"}],\"meta_description\":\"\"}
+                \"titles\": [\"3 opções\"], \"main_keyword\": \"$keyword\", \"quick_info\": {\"prep_time\":\"minutos\",\"cook_time\":\"minutos\",\"yield\":\"x porções\",\"difficulty\":\"Fácil/Médio/Difícil\",\"cuisine\":\"Brasileira\"},
+                \"content_parts\": {\"intro\":\"\",\"snippet\":\"\",\"ingredients\":[],\"instructions\":[],\"faq\":[{\"q\":\"\",\"a\":\"\"}],\"meta_description\":\"\"}
             }";
         }
 

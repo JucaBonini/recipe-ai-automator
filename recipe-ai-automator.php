@@ -3,7 +3,7 @@
  * Plugin Name: Generator AI Now
  * Plugin URI:  https://descomplicandoreceitas.com.br
  * Description: High-performance content generator using AI (OpenAI/Gemini). Fully compatible with WordPress 2026 standards.
- * Version:     1.5.0
+ * Version:     1.5.1
  * Author:      jucasouza
  * License:     GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Global Constants - Zeus Prefix (GAN)
-define('GAN_VERSION', '1.5.0');
+define('GAN_VERSION', '1.5.1');
 define('GAN_PATH', plugin_dir_path(__FILE__));
 define('GAN_URL', plugin_dir_url(__FILE__));
 
