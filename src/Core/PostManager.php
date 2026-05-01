@@ -1,125 +1,104 @@
 <?php
-namespace RecipeAI\Core;
+namespace GeneratorAINow\Core;
 
 class PostManager {
-    public function create_recipe_post($json_data) {
+    public function create_post($json_data, $niche = 'recipe', $category_ids = '', $post_type = 'post') {
         if (!$json_data || !isset($json_data['content_parts'])) return false;
 
-        $title = $json_data['titles'][0];
-        // O conteúdo aqui gera o "corpo" para AdSense e Retenção
-        $content = $this->format_content($json_data['content_parts']);
-
+        $title = $json_data['titles'][0] ?? 'Sem Título';
+        $content = $this->format_content_by_niche($json_data, $niche);
+        
         $post_data = [
             'post_title'   => $title,
             'post_content' => $content,
-            'post_status'  => get_option('rai_post_status', 'draft'),
-            'post_type'    => 'post',
+            'post_status'  => get_option('gan_post_status', 'draft'),
+            'post_type'    => $post_type,
             'post_author'  => get_current_user_id()
         ];
 
         $post_id = wp_insert_post($post_data);
 
         if ($post_id) {
-            // 1. Gera e anexa a imagem via DALL-E 3
+            // Inteligência Zeus: Detecta a taxonomia correta para cada ID de categoria
+            if (!empty($category_ids)) {
+                $cat_array = array_map('intval', explode(',', $category_ids));
+                foreach ($cat_array as $cat_id) {
+                    $term = get_term($cat_id);
+                    if ($term && !is_wp_error($term)) {
+                        wp_set_object_terms($post_id, $cat_id, $term->taxonomy, true);
+                    }
+                }
+            }
+
             $img_gen = new ImageGenerator();
-            $img_gen->generate_and_attach($post_id, $title);
+            $img_gen->generate_and_attach($post_id, $title, $niche);
 
-            // 2. Salva Metadados REAIS do Tema (Otimizado sts-recipe-2)
-            $this->save_meta_data($post_id, $json_data);
 
-            // 3. Salva SEO (Yoast / RankMath)
+            if ($niche === 'recipe') {
+                $this->save_recipe_meta($post_id, $json_data);
+            } else {
+                $this->save_generic_meta($post_id, $json_data, $niche);
+            }
+
             $this->save_seo_data($post_id, $json_data);
-
             return $post_id;
         }
-
         return false;
     }
 
-    private function format_content($parts) {
-        // Mantém a introdução narrativa da Mary para Scroll Depth
-        $html = "<!-- Narrativa da Mary -->\n<p>{$parts['intro']}</p>\n\n";
-        $html .= "<!-- Snippet Retenção -->\n<div class='rai-snippet-box' style='background:#f9f9f9; padding:20px; border-radius:10px; border-left:5px solid #ec5b13;'><strong>Por que você vai amar esta receita?</strong><p>{$parts['snippet']}</p></div>\n\n";
-        $html .= "<p><strong>{$parts['engagement_block']}</strong></p>\n\n";
-        
-        // Aqui o conteúdo textual serve para reforçar o SEO Semântico
-        $html .= "<h2>Dicas de Especialista</h2>\n<p>{$parts['tips']}</p>\n\n";
-        
-        $html .= "<h2>Variações da Receita</h2>\n<ul>";
-        foreach ($parts['variations'] as $v) $html .= "<li>$v</li>";
-        $html .= "</ul>\n\n";
+    private function format_content_by_niche($data, $niche) {
+        $parts = $data['content_parts'];
+        $html = "<p>{$parts['intro']}</p>\n\n";
 
-        $html .= "\n<p><strong>{$parts['engagement_final']}</strong></p>\n";
-        $html .= "<p>{$parts['conclusion_cta']}</p>";
+        if ($niche === 'recipe') {
+            $html .= "<div class='gan-snippet-box' style='background:#f9f9f9; padding:20px; border-radius:10px; border-left:5px solid #ec5b13;'><strong>Destaque:</strong><p>{$parts['snippet']}</p></div>\n\n";
+        } elseif ($niche === 'news') {
+            $html .= "<blockquote>{$parts['snippet']}</blockquote>\n\n";
+            $html .= $parts['full_article'] ?? '';
+        } elseif ($niche === 'review') {
+            $html .= "<h3>Análise Prós & Contras</h3><div style='display:grid;grid-template-columns:1fr 1fr;gap:20px;'>";
+            $html .= "<div style='color:green;'><strong>Prós:</strong><ul>";
+            foreach (($parts['pros'] ?? []) as $p) $html .= "<li>$p</li>";
+            $html .= "</ul></div><div style='color:red;'><strong>Contras:</strong><ul>";
+            foreach (($parts['cons'] ?? []) as $c) $html .= "<li>$c</li>";
+            $html .= "</ul></div></div>\n\n";
+            $html .= $parts['full_review'] ?? '';
+        }
+
+        if (!empty($parts['faq'])) {
+            $html .= "<h2>Perguntas Frequentes</h2>";
+            foreach ($parts['faq'] as $f) {
+                $html .= "<div><strong>" . esc_html($f['q']) . "</strong><p>" . esc_html($f['a']) . "</p></div>";
+            }
+        }
 
         return $html;
     }
 
-    private function save_meta_data($post_id, $data) {
+    private function save_recipe_meta($post_id, $data) {
         $info = $data['quick_info'];
         $parts = $data['content_parts'];
-        $nutri = $parts['nutrition_table'];
+        update_post_meta($post_id, '_tempo_preparo', (int) ($info['prep_time'] ?? 0));
+        update_post_meta($post_id, '_porcoes', $info['yield'] ?? '');
+        update_post_meta($post_id, '_ingredientes', [implode("\n", $parts['ingredients'] ?? [])]);
+        update_post_meta($post_id, '_instrucoes', $parts['instructions'] ?? []);
+    }
 
-        // Campos Básicos do Tema sts-recipe-2
-        update_post_meta($post_id, '_tempo_preparo', (int) filter_var($info['prep_time'], FILTER_SANITIZE_NUMBER_INT));
-        update_post_meta($post_id, '_tempo_cozimento', (int) filter_var($info['cook_time'], FILTER_SANITIZE_NUMBER_INT));
-        update_post_meta($post_id, '_porcoes', $info['yield']);
-        update_post_meta($post_id, '_dificuldade', $info['difficulty']);
-        update_post_meta($post_id, '_recipe_cuisine', 'Brasileira');
-        update_post_meta($post_id, '_diet_type', $parts['storage'] ?? 'Tradicional');
-
-        // Nutrição Real do Tema (Extraindo apenas números para compatibilidade com type="number")
-        update_post_meta($post_id, '_calorias', (int) filter_var($nutri['calories'], FILTER_SANITIZE_NUMBER_INT));
-        update_post_meta($post_id, '_carboidratos', (int) filter_var($nutri['carbs'], FILTER_SANITIZE_NUMBER_INT));
-        update_post_meta($post_id, '_proteinas', (int) filter_var($nutri['protein'], FILTER_SANITIZE_NUMBER_INT));
-        update_post_meta($post_id, '_gorduras', (int) filter_var($nutri['total_fats'], FILTER_SANITIZE_NUMBER_INT));
-        update_post_meta($post_id, '_nutri_serving', $data['quick_info']['yield'] ?: '1 porção (aprox.)');
-        update_post_meta($post_id, '_nutri_source', 'Cálculo Baseado em IA (Tabelas Médias)');
-
-        // Estrutura de Ingredientes (Array para o Tema)
-        update_post_meta($post_id, '_ingredientes_grupo', ['Ingredientes']);
-        update_post_meta($post_id, '_ingredientes', [implode("\n", $parts['ingredients'])]);
-
-        // Estrutura de Instruções (Array para o Tema)
-        update_post_meta($post_id, '_instrucoes', $parts['instructions']);
-
-        // Dicas da Mary e Utensílios (Formatados para Editor Visual)
-        update_post_meta($post_id, '_informacoes_adicionais', wpautop($parts['tips']));
-        
-        $utensilios_html = "<ul>";
-        foreach ($parts['utensils'] as $u) $utensilios_html .= "<li>" . esc_html($u) . "</li>";
-        $utensilios_html .= "</ul>";
-        update_post_meta($post_id, '_utensilios', $utensilios_html);
-
-        // Calcula Tempo Total automaticamente
-        $total = (int) filter_var($info['prep_time'], FILTER_SANITIZE_NUMBER_INT) + (int) filter_var($info['cook_time'], FILTER_SANITIZE_NUMBER_INT);
-        update_post_meta($post_id, '_total_time', $total);
-
-        // 🟢 FAQ Automático (Integração God Mode sts-recipe-2)
-        $faq_perguntas = [];
-        $faq_respostas = [];
-        if (!empty($parts['faq'])) {
-            foreach ($parts['faq'] as $f) {
-                $faq_perguntas[] = sanitize_text_field($f['q']);
-                $faq_respostas[] = sanitize_textarea_field($f['a']);
-            }
+    private function save_generic_meta($post_id, $data, $niche) {
+        $info = $data['quick_info'];
+        if ($niche === 'news') {
+            update_post_meta($post_id, '_gan_source', $info['source'] ?? '');
+            update_post_meta($post_id, '_gan_location', $info['location'] ?? '');
+        } elseif ($niche === 'review') {
+            update_post_meta($post_id, '_gan_rating', $info['rating'] ?? '');
+            update_post_meta($post_id, '_gan_verdict', $info['verdict'] ?? '');
         }
-        update_post_meta($post_id, '_faq_perguntas', $faq_perguntas);
-        update_post_meta($post_id, '_faq_respostas', $faq_respostas);
     }
 
     private function save_seo_data($post_id, $data) {
-        $title = $data['titles'][0];
-        $desc = $data['meta_description'];
-
-        // SEO Engine Pro Integration (sts-seo-engine)
-        update_post_meta($post_id, '_sts_focus_keyword', $title);
-        update_post_meta($post_id, '_sts_seo_title', $title . ' - ' . get_bloginfo('name'));
+        $title = $data['titles'][0] ?? '';
+        $desc = $data['meta_description'] ?? '';
+        update_post_meta($post_id, '_sts_seo_title', $title);
         update_post_meta($post_id, '_sts_seo_desc', $desc);
-        
-        // Compatibilidade Extra (Yoast/RankMath)
-        update_post_meta($post_id, '_yoast_wpseo_metadesc', $desc);
-        update_post_meta($post_id, '_yoast_wpseo_focuskw', $title);
-        update_post_meta($post_id, '_rank_math_description', $desc);
     }
 }
